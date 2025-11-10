@@ -93,6 +93,6 @@ $$;
 2. Insertar al menos 5 productos con diferentes atributos.
 3. Consultar productos por color, tamaño o categoría.
 4. Crear índices GIN y medir el rendimiento.
-5. Implementar pruebas unitarias con pgTAP.
+5. Implementar pruebas unitarias.
 
 ---
