@@ -1,4 +1,4 @@
-name: Run PostgreSQL Tests
+name: Run PostgreSQL NoSQL Tests
 
 on:
   push:
@@ -36,25 +36,32 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt      
+        pip install -r requirements.txt
 
     - name: Wait for PostgreSQL
       run: |
         sleep 10
 
-    - name: Set up database schema and data
-      run: |
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 01_create_tables.sql
+    # --- Ejecutar los 4 scripts de este ejercicio ---
 
-    - name: Insert data
+    - name: 01 Create Tables
       run: |
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 02_insert_data.sql      
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ${{ github.workspace }}/01_create_tables.sql
 
-    - name: Query data
+    - name: 02 Insert Data
       run: |
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 03_query_data.sql          
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ${{ github.workspace }}/02_insert_data.sql    
 
-    - name: Run unit tests
+    - name: 03 Run JSONB Queries (and Index)
       run: |
-        pytest -vv
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ${{ github.workspace }}/03_jsonb_queries.sql
 
+    - name: 04 Run HSTORE Queries (and Index/Function)
+      run: |
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ${{ github.workspace }}/04_hstore_queries.sql
+    
+    # --- Ejecutar los tests de Pytest ---
+    
+    - name: Run Pytest
+      run: |
+        pytest tests/test_productos_nosql.py
