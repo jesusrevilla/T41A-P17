@@ -53,21 +53,21 @@ BEGIN
   WHERE atributos ? 'marca';
   
   IF total_con_marca < 5 THEN
-    RAISE EXCEPTION '❌ Operador ? no funciona correctamente';
+    RAISE EXCEPTION 'Operador ? no funciona correctamente';
   ELSE
-    RAISE NOTICE '✅ Operador ? funcionando: % productos tienen marca', total_con_marca;
+    RAISE NOTICE 'Operador ? funcionando: % productos tienen marca', total_con_marca;
   END IF;
 
   IF (SELECT COUNT(*) FROM productos_hstore WHERE atributos -> 'marca' = 'Sony' AND precio > 500) < 1 THEN
-    RAISE EXCEPTION '❌ Combinación HSTORE con columnas falló';
+    RAISE EXCEPTION 'Combinación HSTORE con columnas falló';
   ELSE
-    RAISE NOTICE '✅ Combinación HSTORE con columnas funcionando';
+    RAISE NOTICE 'Combinación HSTORE con columnas funcionando';
   END IF;
 
   IF (SELECT COUNT(DISTINCT skeys(atributos)) FROM productos_hstore) < 5 THEN
-    RAISE EXCEPTION '❌ Extracción de claves falló';
+    RAISE EXCEPTION 'Extracción de claves falló';
   ELSE
-    RAISE NOTICE '✅ Extracción de claves/valores funcionando';
+    RAISE NOTICE 'Extracción de claves/valores funcionando';
   END IF;
 
   SELECT COUNT(*) INTO total_con_color
@@ -75,9 +75,9 @@ BEGIN
   WHERE atributos ? 'color';
   
   IF total_con_color < 4 THEN
-    RAISE EXCEPTION '❌ Conteo de atributos falló';
+    RAISE EXCEPTION 'Conteo de atributos falló';
   ELSE
-    RAISE NOTICE '✅ Conteo de atributos funcionando: % productos tienen color', total_con_color;
+    RAISE NOTICE 'Conteo de atributos funcionando: % productos tienen color', total_con_color;
   END IF;
 
   RAISE NOTICE '=== TODAS LAS PRUEBAS HSTORE INTERMEDIOS PASARON ===';
