@@ -22,10 +22,11 @@ def run_sql_file(filepath):
     full_path = os.path.join(root_dir, filepath)
 
     try:
-        
-        with psycopg2.connect(**DB_CONFIG) as conn_ext:
-            with conn_ext.cursor() as cur_ext:
-                cur_ext.execute("CREATE EXTENSION IF NOT EXISTS hstore;")
+        conn_ext = psycopg2.connect(**DB_CONFIG)
+        conn_ext.autocommit = True
+        with conn_ext.cursor() as cur_ext:
+            cur_ext.execute("CREATE EXTENSION IF NOT EXISTS hstore;")
+        conn_ext.close()
         
         with open(full_path, 'r') as f:
             sql_content = f.read()
@@ -63,4 +64,3 @@ sql_exercise_files = [
 def test_sql_exercise_file_execution(filename):
     success, error_message = run_sql_file(filename)
     assert success, f"El script {filename} falló al ejecutarse:\n{error_message}"
-
