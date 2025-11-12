@@ -15,6 +15,6 @@ SELECT * FROM productos_jsonb WHERE especificaciones ->> 'color' = 'plata';
 SELECT * FROM productos_jsonb WHERE (especificaciones ->> 'tamaño')::int = 27;
 SELECT * FROM productos_jsonb WHERE especificaciones ->> 'categoria' = 'accesorios';
 
-CREATE INDEX idx_gin_especificaciones ON productos_jsonb USING GIN (especificaciones);
+CREATE INDEX IF NOT EXISTS idx_gin_especificaciones ON productos_jsonb USING GIN (especificaciones);
 
 EXPLAIN ANALYZE SELECT * FROM productos_jsonb WHERE especificaciones @> '{"marca": "Logitech"}';
