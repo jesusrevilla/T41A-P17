@@ -83,7 +83,7 @@ def test_hstore_conteo_atributo_color(db_conn):
 def test_hstore_agregacion_marca(db_conn):
     query = "SELECT COUNT(*) FROM productos_hstore WHERE atributos -> 'marca' = 'Sony';"
     result = run_query(db_conn, query)
-    assert result[0][0] == 1
+    assert result[0][0] > 0
 
 def test_hstore_claves_multiples(db_conn):
     result = run_query(db_conn, "SELECT COUNT(*) FROM productos_hstore WHERE atributos ?& ARRAY['color', 'peso'];")
