@@ -101,3 +101,30 @@ def test_actualizar_valor_en_hstore(db_cursor):
 def test_eliminar_clave_de_hstore(db_cursor):
     """
     Prueba la eliminación de una clave de un registro (Req 5).
+    """
+    # 1. Preparación (Insertar el producto a modificar)
+    oster_attrs = {"color": "Rojo", "tipo": "Licuadora", "material_vaso": "Vidrio"}
+    db_cursor.execute(
+        # Usa la nueva tabla 'productos2'
+        "INSERT INTO productos2 (nombre, atributos_adicionales) VALUES (%s, %s) RETURNING id",
+        ('Oster', oster_attrs)
+    )
+    producto_id = db_cursor.fetchone()[0]
+
+    # 2. Ejecución (Eliminar el atributo 'material_vaso' como en tu SQL)
+    db_cursor.execute(
+        # Usa la nueva tabla 'productos2'
+        "UPDATE productos2 SET atributos_adicionales = delete(atributos_adicionales, 'material_vaso') WHERE id = %s",
+        (producto_id,)
+    )
+
+    # 3. Validación (Assert)
+    # Usa la nueva tabla 'productos2'
+    db_cursor.execute("SELECT atributos_adicionales FROM productos2 WHERE id = %s", (producto_id,))
+    atributos_actualizados = db_cursor.fetchone()[0]
+
+    # Verificar que 'material_vaso' ya no está en el diccionario
+    assert 'material_vaso' not in atributos_actualizados
+    # Verificar que las otras claves siguen presentes
+    assert 'tipo' in atributos_actualizados
+    assert atributos_actualizados['color'] == 'Rojo'
