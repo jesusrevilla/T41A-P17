@@ -52,7 +52,6 @@ sql_exercise_files = [
     "07_ejercicios_intermedios.sql",
     "08_ejercicios_avanzados.sql"
 ]
-
 @pytest.mark.parametrize("filename", sql_exercise_files)
 def test_sql_exercise_file_execution(filename):
     success, error_message = run_sql_file(filename)
