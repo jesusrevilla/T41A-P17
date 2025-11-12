@@ -42,26 +42,56 @@ jobs:
       run: |
         sleep 10
 
-    - name: Set up database schema and data
-      run: |
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f tests/01_create_tables.sql
+    - name: Run 01_create_tables.sql
       env:
         PGPASSWORD: postgres
-
-    - name: Insert data
       run: |
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f tests/02_insert_data.sql
+        PGOPTIONS="-v ON_ERROR_STOP=1" psql -h localhost -U postgres -d test_db -f 01_create_tables.sql
+
+    - name: Run 02_insert_data.sql
       env:
         PGPASSWORD: postgres
-
-    - name: Query data
       run: |
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f tests/03_query_data.sql
+        PGOPTIONS="-v ON_ERROR_STOP=1" psql -h localhost -U postgres -d test_db -f 02_insert_data.sql
+
+    - name: Run 03_query_data.sql
       env:
         PGPASSWORD: postgres
+      run: |
+        PGOPTIONS="-v ON_ERROR_STOP=1" psql -h localhost -U postgres -d test_db -f 03_query_data.sql
 
-    - name: Run unit tests
+    - name: Run 04_unit_tests.sql
+      env:
+        PGPASSWORD: postgres
+      run: |
+        PGOPTIONS="-v ON_ERROR_STOP=1" psql -h localhost -U postgres -d test_db -f 04_unit_tests.sql
+
+    - name: Run 05_ejercicios_recomendados.sql
+      env:
+        PGPASSWORD: postgres
+      run: |
+        PGOPTIONS="-v ON_ERROR_STOP=1" psql -h localhost -U postgres -d test_db -f 05_ejercicios_recomendados.sql
+
+    - name: Run 06_ejercicios_basicos_de_hstore.sql
+      env:
+        PGPASSWORD: postgres
+      run: |
+        PGOPTIONS="-v ON_ERROR_STOP=1" psql -h localhost -U postgres -d test_db -f 06_ejercicios_basicos_de_hstore.sql
+
+    - name: Run 07_ejercicios_intermedios.sql
+      env:
+        PGPASSWORD: postgres
+      run: |
+        PGOPTIONS="-v ON_ERROR_STOP=1" psql -h localhost -U postgres -d test_db -f 07_ejercicios_intermedios.sql
+
+    - name: Run 08_ejercicios_avanzados.sql
+      env:
+        PGPASSWORD: postgres
+      run: |
+        PGOPTIONS="-v ON_ERROR_STOP=1" psql -h localhost -U postgres -d test_db -f 08_ejercicios_avanzados.sql
+        
+    - name: Run Pytest
+      env:
+        PGPASSWORD: postgres 
       run: |
         pytest -vv
-      env:
-        PGPASSWORD: postgres
