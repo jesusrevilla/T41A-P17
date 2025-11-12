@@ -11,5 +11,4 @@ SELECT * FROM productos_jsonb WHERE especificaciones->>'tamaño' = '15in';
 CREATE INDEX idx_jsonb_especificaciones ON productos_jsonb USING GIN (especificaciones);
 
 -- Medir rendimiento
--- (El operador @> es ideal para GIN)
 EXPLAIN ANALYZE SELECT * FROM productos_jsonb WHERE especificaciones @> '{"color": "rojo"}';
