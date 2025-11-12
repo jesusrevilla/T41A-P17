@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS hstore;
+
 CREATE INDEX IF NOT EXISTS idx_gin_atributos ON productos_hstore USING GIN (atributos);
 
 SELECT atributos -> 'marca' AS marca, count(*)
