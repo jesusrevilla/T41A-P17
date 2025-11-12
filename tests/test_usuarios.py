@@ -33,6 +33,8 @@ def run_sql_file(filepath):
         with psycopg2.connect(**DB_CONFIG) as conn_run:
             with conn_run.cursor() as cur_run:
                 cur_run.execute(sql_content)
+        
+        return True, ""
     
     except (Exception, psycopg2.Error) as error:
         return False, str(error)
@@ -61,7 +63,4 @@ sql_exercise_files = [
 def test_sql_exercise_file_execution(filename):
     success, error_message = run_sql_file(filename)
     assert success, f"El script {filename} falló al ejecutarse:\n{error_message}"
-
-
-
 
