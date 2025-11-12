@@ -76,8 +76,9 @@ jobs:
 
     - name: Run Python tests
       run: |
-        pytest test_usuarios.py -v
-        pytest test_complete.py -v
+        ls -la 
+        python -m pytest test_usuarios.py -v
+        python -m pytest test_complete.py -v
 
     - name: Final verification
       run: |
