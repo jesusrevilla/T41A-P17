@@ -44,27 +44,27 @@ BEGIN
   RAISE NOTICE '=== PRUEBAS HSTORE BÁSICOS ===';
   
   IF NOT EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'hstore') THEN
-    RAISE EXCEPTION '❌ Extensión HSTORE no activada';
+    RAISE EXCEPTION 'Extensión HSTORE no activada';
   ELSE
-    RAISE NOTICE '✅ Extensión HSTORE activada';
+    RAISE NOTICE 'Extensión HSTORE activada';
   END IF;
 
   IF (SELECT COUNT(*) FROM productos_hstore) < 5 THEN
-    RAISE EXCEPTION '❌ Debe haber al menos 5 productos HSTORE';
+    RAISE EXCEPTION 'Debe haber al menos 5 productos HSTORE';
   ELSE
-    RAISE NOTICE '✅ Datos HSTORE insertados correctamente';
+    RAISE NOTICE 'Datos HSTORE insertados correctamente';
   END IF;
 
   IF (SELECT COUNT(*) FROM productos_hstore WHERE atributos -> 'color' = 'negro') < 1 THEN
-    RAISE EXCEPTION '❌ Consulta por color negro no funciona';
+    RAISE EXCEPTION 'Consulta por color negro no funciona';
   ELSE
-    RAISE NOTICE '✅ Consultas por clave funcionando';
+    RAISE NOTICE 'Consultas por clave funcionando';
   END IF;
 
   IF NOT EXISTS (SELECT 1 FROM productos_hstore WHERE nombre = 'Lavadora' AND atributos -> 'capacidad' = '10kg') THEN
-    RAISE EXCEPTION '❌ Actualización de capacidad falló';
+    RAISE EXCEPTION 'Actualización de capacidad falló';
   ELSE
-    RAISE NOTICE '✅ Actualizaciones HSTORE funcionando';
+    RAISE NOTICE 'Actualizaciones HSTORE funcionando';
   END IF;
 
   RAISE NOTICE '=== TODAS LAS PRUEBAS HSTORE BÁSICOS PASARON ===';
