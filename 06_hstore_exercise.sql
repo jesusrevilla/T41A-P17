@@ -1,31 +1,38 @@
-DROP TABLE IF EXISTS productos;
-
+-- 1. Crear la extensión y la tabla
 CREATE EXTENSION IF NOT EXISTS hstore;
 
-CREATE TABLE productos (
+CREATE TABLE productos2 (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    peso NUMERIC(10, 2),
-    atributos_adicionales HSTORE
+    atributos HSTORE
 );
 
-INSERT INTO productos (nombre, peso, atributos_adicionales)
+-- 2. Insertar registros con múltiples pares clave-valor
+INSERT INTO productos2 (nombre, atributos)
 VALUES 
-('Sony',2.5,'"color"=>"Negro", "tipo" => "Audífonos", "bluetooth" => "true", "cancelacion_ruido" => "activa"'),
-('Oster',3.1,'"color"=>"Rojo", "tipo" => "Licuadora", "velocidades" => "5", "material_vaso" => "Vidrio"'),
-('Logitech', 0.15,'"color"=>"Blanco", "tipo" => "Mouse", "dpi" => "16000", "inalambrico" => "true"'),
-('Nike', 0.8, '"color"=>"Rojo", "tipo" => "Zapatillas", "talla" => "US 10", "material_suela" => "Goma"'),
-('IKEA', 15.0, '"color"=>"Rojo", "tipo" => "Escritorio", "dimensiones" => "120x60cm", "peso" => "68kg"');
+('Sony WH-1000XM4', '"marca"=>"Sony", "peso"=>"2.5", "color"=>"negro", "tipo"=>"Audífonos", "bluetooth"=>"true"'),
+('Oster Licuadora', '"marca"=>"Oster", "peso"=>"3.1", "color"=>"rojo", "tipo"=>"Licuadora", "velocidades"=>"5"'),
+('Logitech G Pro', '"marca"=>"Logitech", "peso"=>"0.15", "color"=>"blanco", "tipo"=>"Mouse", "dpi"=>"16000"'),
+('Nike Air Max', '"marca"=>"Nike", "peso"=>"0.8", "color"=>"rojo", "tipo"=>"Zapatillas", "talla"=>"US 10"'),
+('IKEA Micke', '"marca"=>"IKEA", "peso"=>"15.0", "color"=>"rojo", "tipo"=>"Escritorio", "dimensiones"=>"120x60cm"');
 
-SELECT * FROM productos WHERE atributos_adicionales -> 'color' = 'Rojo';
+-- 3. Consultar por una clave específica (color = 'rojo')
+SELECT * FROM productos2 WHERE atributos -> 'color' = 'rojo';
 
-UPDATE productos
-SET atributos_adicionales = atributos_adicionales || 'peso => 79kg'
-WHERE nombre = 'IKEA';
-SELECT * FROM productos WHERE atributos_adicionales -> 'color' = 'Rojo';
+-- 4. Actualizar un valor (Cambiar 'peso' del escritorio IKEA a '17.5')
+UPDATE productos2
+SET atributos = atributos || '"peso" => "17.5"'
+WHERE nombre = 'IKEA Micke';
 
-UPDATE productos
-SET atributos_adicionales = delete(atributos_adicionales, 'material_vaso')
-WHERE nombre = 'Oster';
+SELECT nombre, atributos FROM productos2 WHERE nombre = 'IKEA Micke';
 
-SELECT * FROM productos WHERE color='Rojo';
+-- 5. Eliminar una clave (Eliminar 'color' de la licuadora Oster)
+UPDATE productos2
+SET atributos = delete(atributos, 'color')
+WHERE nombre = 'Oster Licuadora';
+
+-- Verificamos la eliminación
+SELECT nombre, atributos FROM productos2 WHERE nombre = 'Oster Licuadora';
+
+-- Consulta final para ver el estado de todos los datos
+SELECT * FROM productos2;
