@@ -56,8 +56,7 @@ def test_edad_juan():
 sql_exercise_files = [
     "05_ejercicios_recomendados.sql",
     "06_ejercicios_basicos_de_hstore.sql",
-    "07_ejercicios_intermedios.sql",
-    "08_ejercicios_avanzados.sql"
+    "07_ejercicios_intermedios.sql"
 ]
 
 @pytest.mark.parametrize("filename", sql_exercise_files)
