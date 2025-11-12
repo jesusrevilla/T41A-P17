@@ -1,19 +1,17 @@
 import psycopg2
-import pytest
-
-DB_CONFIG = {
-    "dbname": "test_db",
-    "user": "postgres",
-    "password": "postgres",
-    "host": "localhost",
-    "port": 5432
-}
 
 def run_query(query):
-    with psycopg2.connect(**DB_CONFIG) as conn:
-        with conn.cursor() as cur:
-            cur.execute(query)
-            return cur.fetchall()
+    conn = psycopg2.connect(
+        dbname="postgres",
+        user="postgres",
+        password="postgres",
+        host="localhost"
+    )
+    cur = conn.cursor()
+    cur.execute(query)
+    result = cur.fetchall()
+    conn.close()
+    return result
 
 def test_marca_laptop():
     result = run_query("SELECT atributos -> 'marca' FROM productos WHERE nombre = 'Laptop';")
