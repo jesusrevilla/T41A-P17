@@ -42,21 +42,21 @@ jobs:
       run: |
         sleep 10
 
-    - name: 01 Create Tables
+    - name: 05 Create Tables
       run: |
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ${{ github.workspace }}/01_create_tables.sql
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ${{ github.workspace }}/05_create_tables.sql
 
-    - name: 02 Insert Data
+    - name: 06 Insert Data
       run: |
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ${{ github.workspace }}/02_insert_data.sql    
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ${{ github.workspace }}/06_insert_data.sql    
 
-    - name: 03 Run JSONB Queries (and Index)
+    - name: 07 Run JSONB Queries (and Index)
       run: |
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ${{ github.workspace }}/03_jsonb_queries.sql
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ${{ github.workspace }}/07_jsonb_queries.sql
 
-    - name: 04 Run HSTORE Queries (and Index/Function)
+    - name: 08 Run HSTORE Queries (and Index/Function)
       run: |
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ${{ github.workspace }}/04_hstore_queries.sql
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ${{ github.workspace }}/08_hstore_queries.sql
     
     - name: Run Pytest
       run: |
