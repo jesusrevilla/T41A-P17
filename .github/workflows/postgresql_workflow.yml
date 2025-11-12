@@ -49,19 +49,22 @@ jobs:
     - name: Set up database schema and data
       run: |
         echo "Running schema setup"
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 01_create_tables.sql
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ./sql/01_create_tables.sql
 
     - name: Insert data
       run: |
         echo "Inserting data"
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 02_insert_data.sql
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ./sql/02_insert_data.sql
 
-    - name: Query data
+    - name: Query data (optional, just to check if data is inserted correctly)
       run: |
         echo "Querying data"
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 03_query_data.sql
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ./sql/03_query_data.sql
 
     - name: Run unit tests
       run: |
         echo "Running unit tests"
         pytest -vv
+
+
+
