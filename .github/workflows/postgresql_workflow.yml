@@ -19,7 +19,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -h localhost -d test_db"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -31,30 +31,40 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.X'
+        python-version: '3.8'  # O usa la versión que prefieras
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt      
+        pip install -r requirements.txt
 
-    - name: Wait for PostgreSQL
+    - name: Wait for PostgreSQL to be ready
       run: |
-        sleep 10
+        until PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -c '\q'; do
+          echo "Waiting for PostgreSQL to be ready..."
+          sleep 2
+        done
+        echo "PostgreSQL is ready."
 
     - name: Set up database schema and data
       run: |
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 01_create_tables.sql
+        echo "Running schema setup"
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ./sql/01_create_tables.sql
 
     - name: Insert data
       run: |
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 02_insert_data.sql      
+        echo "Inserting data"
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ./sql/02_insert_data.sql
 
-    - name: Query data
+    - name: Query data (optional, just to check if data is inserted correctly)
       run: |
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 03_query_data.sql          
+        echo "Querying data"
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ./sql/03_query_data.sql
 
     - name: Run unit tests
       run: |
+        echo "Running unit tests"
         pytest -vv
+
+
 

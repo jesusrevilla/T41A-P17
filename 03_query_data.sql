@@ -1,8 +1,5 @@
-SELECT data->>'nombre' AS nombre
-FROM usuarios
-WHERE data->>'activo' = 'true';
-
-CREATE INDEX idx_data_gin ON usuarios USING GIN (data);
-
-SELECT * FROM usuarios
-WHERE data @> '{"activo": true}';
+SELECT nombre, especificaciones
+FROM productos_jsonb
+WHERE especificaciones ->> 'color' = 'rojo'
+   OR especificaciones ->> 'tamaño' = '6 pulgadas'
+   OR especificaciones ->> 'categoria' = 'Ropa';
