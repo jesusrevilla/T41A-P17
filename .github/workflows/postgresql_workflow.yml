@@ -42,19 +42,47 @@ jobs:
       run: |
         sleep 10
 
-    - name: Set up database schema and data
+    # --- JSONB Section ---
+    - name: Create usuarios table
       run: |
         PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 01_create_tables.sql
 
-    - name: Insert data
+    - name: Insert usuarios data
       run: |
         PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 02_insert_data.sql      
 
-    - name: Query data
+    - name: Query usuarios data
       run: |
         PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 03_query_data.sql          
 
-    - name: Run unit tests
+    - name: Run usuarios unit tests (SQL)
+      run: |
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 04_unit_tests.sql
+
+
+    # --- HSTORE Section ---
+    - name: Enable HSTORE extension
+      run: |
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 05_enable_hstore.sql
+
+    - name: Create productos table
+      run: |
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 06_create_hstore_table.sql
+
+    - name: Insert productos data
+      run: |
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 07_insert_hstore_data.sql
+
+    - name: Query productos data
+      run: |
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 08_query_hstore.sql
+
+    - name: Run productos unit tests (SQL)
+      run: |
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 09_unit_tests_hstore.sql
+
+
+    # --- Pytest Section ---
+    - name: Run Python unit tests
       run: |
         pytest -vv
-
