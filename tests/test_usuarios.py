@@ -1,5 +1,6 @@
 import psycopg2
 import pytest
+import os
 
 DB_CONFIG = {
     "dbname": "test_db",
@@ -15,6 +16,30 @@ def run_query(query):
             cur.execute(query)
             return cur.fetchall()
 
+def run_sql_file(filepath):
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(test_dir) 
+    full_path = os.path.join(root_dir, filepath)
+
+    try:
+        conn_ext = psycopg2.connect(**DB_CONFIG)
+        conn_ext.autocommit = True
+        with conn_ext.cursor() as cur_ext:
+            cur_ext.execute("CREATE EXTENSION IF NOT EXISTS hstore;")
+        conn_ext.close()
+        
+        with open(full_path, 'r') as f:
+            sql_content = f.read()
+        
+        with psycopg2.connect(**DB_CONFIG) as conn_run:
+            with conn_run.cursor() as cur_run:
+                cur_run.execute(sql_content)
+        
+        return True, ""
+    
+    except (Exception, psycopg2.Error) as error:
+        return False, str(error)
+
 def test_nombre_ana():
     result = run_query("SELECT data->>'nombre' FROM usuarios WHERE id = 1;")
     print(f'resultado del query: {result}')
@@ -27,3 +52,14 @@ def test_usuario_activo():
 def test_edad_juan():
     result = run_query("SELECT data->>'edad' FROM usuarios WHERE id = 2;")
     assert result[0][0] == "25"
+
+sql_exercise_files = [
+    "05_ejercicios_recomendados.sql",
+    "06_ejercicios_basicos_de_hstore.sql",
+    "07_ejercicios_intermedios.sql"
+]
+
+@pytest.mark.parametrize("filename", sql_exercise_files)
+def test_sql_exercise_file_execution(filename):
+    success, error_message = run_sql_file(filename)
+    assert success, f"El script {filename} falló al ejecutarse:\n{error_message}"
