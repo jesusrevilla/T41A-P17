@@ -52,8 +52,19 @@ jobs:
 
     - name: Query data
       run: |
-        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 03_query_data.sql          
-
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 03_query_data.sql     
+    - name: Recon data
+      run: |
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f jsonb_recomendados.sql
+    - name: hstore data
+      run: |
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f hstore_ejercicios.sql        
+    - name: inter data
+      run: |
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f hstore_intermedios.sql 
+    - name: avan data
+      run: |
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -fhstore_avanzados.sql         
     - name: Run unit tests
       run: |
         pytest -vv
