@@ -1,3 +1,14 @@
+ALTER TABLE productos_hstore ADD COLUMN precio NUMERIC(10, 2);
+
+UPDATE productos_hstore SET precio = 15.50 WHERE nombre = 'Ferrari de Juguete';
+UPDATE productos_hstore SET precio = 150.00 WHERE nombre = 'Teclado Mecánico';
+UPDATE productos_hstore SET precio = 0.50 WHERE nombre = 'Manzana';
+UPDATE productos_hstore SET precio = 499.99 WHERE nombre = 'Monitor Gaming';
+UPDATE productos_hstore SET precio = 800.00 WHERE nombre = 'Silla de Oficina';
+
+INSERT INTO productos_hstore (nombre, precio, atributos) VALUES
+('Televisor Bravia', 650.00, 'marca => "Sony", color => "negro", resolucion => "4K"');
+
 -- 1. Filtrar registros que contienen una clave
 SELECT id, nombre, atributos
 FROM productos_hstore
