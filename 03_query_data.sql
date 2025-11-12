@@ -19,3 +19,10 @@ WHERE nombre = 'Manzana';
 UPDATE productos
 SET atributos = delete(atributos, 'color')
 WHERE nombre = 'Tomate';
+
+--Ejercicios intermedios 
+CREATE INDEX idx_data_gin ON productos USING GIN (atributos);
+SELECT * FROM productos
+WHERE atributos ? 'marca';
+https://onecompiler.com/postgresql/444agpzfh
+https://onecompiler.com/postgresql/444ahdbyb
