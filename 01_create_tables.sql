@@ -4,13 +4,13 @@ CREATE TABLE usuarios (
 );
 
 
-CREATE IF NOT EXISTS TABLE productos_jsonb (
+CREATE TABLE IF NOT EXISTS productos_jsonb (
   id SERIAL PRIMARY KEY,
   nombre VARCHAR(100),
   especificaciones JSONB
 );
 
-CREATE IF NOT EXISTS TABLE productos_hstore (
+CREATE TABLE IF NOT EXISTS productos_hstore (
   id SERIAL PRIMARY KEY,
   nombre VARCHAR(100),
   precio DECIMAL(10, 2),
