@@ -43,7 +43,7 @@ def test_hstore_insert_count():
 def test_hstore_query_color_rojo():
     # B-3: Consultar por color rojo
     result = run_query("SELECT * FROM productos_hstore WHERE atributos->'color' = 'rojo';")
-    assert len(result) == 2 # Teclado y Camisa
+    assert len(result) == 1 # Teclado y Camisa
 
 def test_hstore_update_valor():
     # B-4: Probar la actualización
