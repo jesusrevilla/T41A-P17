@@ -42,8 +42,6 @@ jobs:
       run: |
         sleep 10
 
-    # --- Ejecutar los 4 scripts de este ejercicio ---
-
     - name: 01 Create Tables
       run: |
         PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ${{ github.workspace }}/01_create_tables.sql
@@ -59,8 +57,6 @@ jobs:
     - name: 04 Run HSTORE Queries (and Index/Function)
       run: |
         PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ${{ github.workspace }}/04_hstore_queries.sql
-    
-    # --- Ejecutar los tests de Pytest ---
     
     - name: Run Pytest
       run: |
