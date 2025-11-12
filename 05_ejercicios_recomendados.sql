@@ -1,4 +1,4 @@
-CREATE IF NOT EXISTS TABLE productos_jsonb (
+CREATE TABLE IF NOT EXISTS productos_jsonb (
   id SERIAL PRIMARY KEY,
   nombre VARCHAR(100),
   especificaciones JSONB
