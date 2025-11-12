@@ -1,5 +1,7 @@
 DO $$
 BEGIN
+  RAISE NOTICE 'Iniciando pruebas unitarias SQL...';
+
   IF EXISTS (
     SELECT 1 FROM usuarios WHERE id = 1 AND data->>'nombre' = 'Ana'
   ) THEN
@@ -23,5 +25,7 @@ BEGIN
   ELSE
     RAISE EXCEPTION 'Fallo: edad incorrecta para id 2';
   END IF;
+
+  RAISE NOTICE 'Todas las pruebas SQL pasaron.';
 END;
 $$;
