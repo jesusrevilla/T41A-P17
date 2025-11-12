@@ -90,27 +90,32 @@ def test_combinar_hstore_y_columna(db_cursor):
 def test_extraer_claves_y_valores(db_cursor):
     """
     Prueba el Ejercicio 3: Usar skeys() y svals().
+    (Versión corregida que valida el dict en Python)
     """
     # 1. Preparación
     attrs = {"color": "rojo", "tipo": "Ropa", "talla": "M"}
+    
+    # IMPORTANTE: Asegúrate de incluir un precio (aunque sea NULL) 
+    # si tu tabla 'productos2' tiene la columna 'precio'.
     db_cursor.execute(
-        "INSERT INTO productos2 (nombre, atributos) VALUES (%s, %s)",
-        ('Camisa', attrs)
+        "INSERT INTO productos2 (nombre, precio, atributos) VALUES (%s, %s, %s)",
+        ('Camisa', None, attrs) # Se añade None para la columna 'precio'
     )
 
-    # 2. Ejecución
-    # Usamos array_agg para obtener un array de arrays, más fácil de probar
-    query = """
-    SELECT skeys(atributos), svals(atributos) 
-    FROM productos2 WHERE nombre = 'Camisa'
-    """
+    # 2. Ejecución (Modificada)
+    # Pedimos el HSTORE completo, que psycopg2 convertirá a un dict
+    query = "SELECT atributos FROM productos2 WHERE nombre = 'Camisa'"
     db_cursor.execute(query)
-    claves, valores = db_cursor.fetchone()
+    
+    atributos_resultado = db_cursor.fetchone()[0] # Esto será un dict
 
-    # 3. Validación
-    # Convertimos a 'set' porque el orden de HSTORE no está garantizado
-    assert set(claves) == {"color", "tipo", "talla"}
-    assert set(valores) == {"rojo", "Ropa", "M"}
+    # 3. Validación (Modificada)
+    # Validamos el dict resultante
+    assert atributos_resultado == attrs
+    
+    # También podemos validar las claves y valores por separado
+    assert set(atributos_resultado.keys()) == {"color", "tipo", "talla"}
+    assert set(atributos_resultado.values()) == {"rojo", "Ropa", "M"}
 
 def test_contar_productos_con_atributo(db_cursor):
     """
