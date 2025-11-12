@@ -22,15 +22,17 @@ def run_sql_file(filepath):
     full_path = os.path.join(root_dir, filepath)
 
     try:
+        
+        with psycopg2.connect(**DB_CONFIG) as conn_ext:
+            with conn_ext.cursor() as cur_ext:
+                cur_ext.execute("CREATE EXTENSION IF NOT EXISTS hstore;")
+        
         with open(full_path, 'r') as f:
             sql_content = f.read()
         
-        with psycopg2.connect(**DB_CONFIG) as conn:
-            with conn.cursor() as cur:
-                cur.execute("CREATE EXTENSION IF NOT EXISTS hstore;")
-                cur.execute(sql_content)
-        
-        return True, ""
+        with psycopg2.connect(**DB_CONFIG) as conn_run:
+            with conn_run.cursor() as cur_run:
+                cur_run.execute(sql_content)
     
     except (Exception, psycopg2.Error) as error:
         return False, str(error)
