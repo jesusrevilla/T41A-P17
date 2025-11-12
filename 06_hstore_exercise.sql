@@ -1,4 +1,4 @@
-DROP TABLE productos;
+DROP TABLE IF EXISTS productos;
 
 CREATE EXTENSION IF NOT EXISTS hstore;
 
