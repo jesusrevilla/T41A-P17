@@ -18,7 +18,8 @@ def run_query(query):
 
 def run_sql_file(filepath):
     test_dir = os.path.dirname(os.path.abspath(__file__))
-    full_path = os.path.join(test_dir, filepath)
+    root_dir = os.path.dirname(test_dir) 
+    full_path = os.path.join(root_dir, filepath)
 
     try:
         with open(full_path, 'r') as f:
@@ -52,11 +53,11 @@ sql_exercise_files = [
     "07_ejercicios_intermedios.sql",
     "08_ejercicios_avanzados.sql"
 ]
+
 @pytest.mark.parametrize("filename", sql_exercise_files)
 def test_sql_exercise_file_execution(filename):
     success, error_message = run_sql_file(filename)
     assert success, f"El script {filename} falló al ejecutarse:\n{error_message}"
-
 
 
 
