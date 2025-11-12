@@ -1,4 +1,4 @@
-CREATE INDEX idx_gin_atributos ON productos_hstore USING GIN (atributos);
+CREATE INDEX IF NOT EXISTS idx_gin_atributos ON productos_hstore USING GIN (atributos);
 
 SELECT atributos -> 'marca' AS marca, count(*)
 FROM productos_hstore
