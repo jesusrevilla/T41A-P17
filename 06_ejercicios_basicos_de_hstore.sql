@@ -1,4 +1,4 @@
-CREATE TABLE productos_hstore (
+CREATE IF NOT EXISTS TABLE productos_hstore (
   id SERIAL PRIMARY KEY,
   nombre VARCHAR(100),
   precio DECIMAL(10, 2),
