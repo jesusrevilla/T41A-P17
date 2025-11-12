@@ -27,6 +27,7 @@ def run_sql_file(filepath):
         
         with psycopg2.connect(**DB_CONFIG) as conn:
             with conn.cursor() as cur:
+                cur.execute("CREATE EXTENSION IF NOT EXISTS hstore;")
                 cur.execute(sql_content)
         
         return True, ""
