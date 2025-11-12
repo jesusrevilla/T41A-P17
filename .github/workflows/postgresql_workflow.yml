@@ -1,58 +1,67 @@
--- =========================================================
--- ⚙️ Archivo: workflow.sql
--- Ejecución secuencial de todos los ejercicios
--- =========================================================
+name: Run PostgreSQL Tests
 
-\echo '--- Iniciando configuración de entorno ---'
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
--- Extensiones
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE EXTENSION IF NOT EXISTS hstore;
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready -U postgres -d test_db
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
-\echo '--- 1. Crear tabla JSONB ---'
-\i ejercicio01_crear_tabla_jsonb.sql
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-\echo '--- 2. Insertar productos JSONB ---'
-\i ejercicio02_insertar_productos_jsonb.sql
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'  # O usa la versión que prefieras
 
-\echo '--- 3. Consultar productos JSONB ---'
-\i ejercicio03_consultar_productos_jsonb.sql
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-\echo '--- 4. Crear índice JSONB ---'
-\i ejercicio04_crear_indice_jsonb.sql
+    - name: Wait for PostgreSQL to be ready
+      run: |
+        until PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -c '\q'; do
+          echo "Waiting for PostgreSQL to be ready..."
+          sleep 2
+        done
+        echo "PostgreSQL is ready."
 
-\echo '--- 5. Pruebas unitarias JSONB ---'
-\i ejercicio05_pruebas_unitarias_jsonb.sql
+    - name: Set up database schema and data
+      run: |
+        echo "Running schema setup"
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 01_create_tables.sql
 
-\echo '--- 6. Crear tabla HSTORE ---'
-\i ejercicio06_crear_tabla_hstore.sql
+    - name: Insert data
+      run: |
+        echo "Inserting data"
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 02_insert_data.sql
 
-\echo '--- 7. Insertar productos HSTORE ---'
-\i ejercicio07_insertar_productos_hstore.sql
+    - name: Query data
+      run: |
+        echo "Querying data"
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 03_query_data.sql
 
-\echo '--- 8. Consultar color rojo HSTORE ---'
-\i ejercicio08_consultar_color_rojo_hstore.sql
-
-\echo '--- 9. Actualizar peso HSTORE ---'
-\i ejercicio09_actualizar_peso_hstore.sql
-
-\echo '--- 10. Eliminar clave color HSTORE ---'
-\i ejercicio10_eliminar_clave_color_hstore.sql
-
-\echo '--- 11. Filtrar por clave HSTORE ---'
-\i ejercicio11_filtrar_por_clave_hstore.sql
-
-\echo '--- 12. Combinar condiciones HSTORE ---'
-\i ejercicio12_combinar_condiciones_hstore.sql
-
-\echo '--- 13. Extraer claves y valores HSTORE ---'
-\i ejercicio13_extraer_claves_valores_hstore.sql
-
-\echo '--- 14. Contar atributo color HSTORE ---'
-\i ejercicio14_contar_atributo_color_hstore.sql
-
-\echo '--- ✅ Todos los ejercicios ejecutados. Ahora corriendo pruebas ---'
-
-\i tests.sql
-
-\echo '--- 🚀 Workflow completado con éxito ---'
+    - name: Run unit tests
+      run: |
+        echo "Running unit tests"
+        pytest -vv
