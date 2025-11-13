@@ -6,6 +6,14 @@ VALUES
   ('{"nombre": "Sarah", "activo": false, "edad": 21}'),
   ('{"nombre": "Steve", "activo": false, "edad": 24}');
 
+INSERT INTO productos_u (atributos)
+VALUES 
+  ('{"nombre": "Laptop", "categoria": "Dell", "tamaño ": "Pequeño"}'),
+  ('{"nombre": "Teléfono", "categoria": "Samsung", "tamaño ": "Grande"}'),
+  ('{"nombre": "Celular", "categoria": "Samsung", "tamaño ": "Medio"}'),
+  ('{"nombre": "Control", "categoria": "LG", "tamaño ": "Grande"}'),
+  ('{"nombre": "Mouse", "categoria": "Apple", "tamaño ": "Medio"}');
+
 INSERT INTO productos (nombre, atributos)
 VALUES 
   ('Jamón', 'marca => Fud, color => rosa, peso => 0.5kg'),
