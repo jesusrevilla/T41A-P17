@@ -3,6 +3,10 @@ CREATE TABLE usuarios (
   data JSONB
 );
 
+CREATE TABLE productos_u (
+  id SERIAL PRIMARY KEY,
+  atributos JSONB
+);
 CREATE EXTENSION IF NOT EXISTS hstore;
 
 CREATE TABLE productos (
