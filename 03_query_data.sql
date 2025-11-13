@@ -32,3 +32,6 @@ WHERE atributos -> 'marca' = 'Fud' AND atributos -> 'peso' > '0.1Kg';
 
 SELECT skeys(atributos) AS clave, svals(atributos) AS valor
 FROM productos;
+
+SELECT COUNT(*) FROM productos
+WHERE atributos ? 'color';
