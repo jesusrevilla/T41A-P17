@@ -27,6 +27,8 @@ CREATE INDEX idx_data_gin ON productos USING GIN (atributos);
 SELECT * FROM productos
 WHERE atributos ? 'marca';
 
-
 SELECT * FROM productos
 WHERE atributos -> 'marca' = 'Fud' AND atributos -> 'peso' > '0.1Kg';
+
+SELECT skeys(atributos) AS clave, svals(atributos) AS valor
+FROM productos;
