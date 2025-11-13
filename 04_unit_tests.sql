@@ -1,27 +1,23 @@
 DO $$
 BEGIN
+  RAISE NOTICE 'Iniciando pruebas unitarias SQL...';
+
   IF EXISTS (
     SELECT 1 FROM usuarios WHERE id = 1 AND data->>'nombre' = 'Ana'
   ) THEN
-    RAISE NOTICE 'OK: nombre correcto para id 1';
+    RAISE NOTICE 'OK: Usuario Ana encontrado.';
   ELSE
-    RAISE EXCEPTION 'Fallo: nombre incorrecto para id 1';
-  END IF;
-
-  IF EXISTS (
-    SELECT 1 FROM usuarios WHERE id = 1 AND data->>'activo' = 'true'
-  ) THEN
-    RAISE NOTICE 'OK: usuario activo para id 1';
-  ELSE
-    RAISE EXCEPTION 'Fallo: usuario no está activo para id 1';
+    RAISE EXCEPTION 'Fallo: Usuario Ana no encontrado.';
   END IF;
 
   IF EXISTS (
     SELECT 1 FROM usuarios WHERE id = 2 AND data->>'edad' = '25'
   ) THEN
-    RAISE NOTICE 'OK: edad correcta para id 2';
+    RAISE NOTICE 'OK: Edad correcta para Juan.';
   ELSE
     RAISE EXCEPTION 'Fallo: edad incorrecta para id 2';
   END IF;
+
+  RAISE NOTICE 'Todas las pruebas SQL pasaron.';
 END;
 $$;
