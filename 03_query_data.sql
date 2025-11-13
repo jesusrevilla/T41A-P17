@@ -35,3 +35,5 @@ FROM productos;
 
 SELECT COUNT(*) FROM productos
 WHERE atributos ? 'color';
+
+--Ejercicios avanzados
