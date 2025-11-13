@@ -20,42 +20,44 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U postgres"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Install PostgreSQL client and dependencies
-        run: sudo apt-get update && sudo apt-get install -y postgresql-client python3-pip
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
 
-      - name: Wait for PostgreSQL to be ready
-        run: |
-          until pg_isready -h localhost -U postgres; do
-            echo "Waiting for database connection..."
-            sleep 2
-          done
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-      - name: Create tables
-        run: |
-          echo "Creating tables..."
-          PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 01_create_tables.sql
+    - name: Wait for PostgreSQL
+      run: sleep 10
 
-      - name: Insert data
-        run: |
-          echo "Inserting data..."
-          PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 02_insert_data.sql
+    - name: Create tables
+      run: |
+        echo "Creating tables..."
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ./tests/01_create_tables.sql
 
-      - name: Run queries or procedures
-        run: |
-          echo "Running queries..."
-          PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f 03_query_data.sql
+    - name: Insert data
+      run: |
+        echo "Inserting data..."
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ./tests/02_insert_data.sql
 
-      - name: Install Python dependencies
-        run: pip install psycopg2 pytest
+    - name: Verify data
+      run: |
+        echo "Checking inserted data..."
+        PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -f ./tests/03_query_data.sql
 
-      - name: Run pytest
-        run: pytest -v
+    - name: Run unit tests
+      run: |
+        echo "Running pytest..."
+        pytest -vv
