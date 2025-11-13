@@ -26,3 +26,7 @@ WHERE nombre = 'Tomate';
 CREATE INDEX idx_data_gin ON productos USING GIN (atributos);
 SELECT * FROM productos
 WHERE atributos ? 'marca';
+
+
+SELECT * FROM productos
+WHERE atributos -> 'marca' = 'Fud' AND atributos -> 'peso' > '0.1Kg';
