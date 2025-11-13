@@ -85,12 +85,17 @@ def test_i3_skeys_svals_and_count_attr_color():
 
 def test_a1_index_gin_explain_mentions_index():
     conn = connect(); cur = conn.cursor()
+     # Forzamos evitar Seq Scan para que el plan muestre el índice GIN
+    cur.execute("SET enable_seqscan = off;")
     cur.execute("""
       EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
-      SELECT id FROM productos_hs WHERE atributos -> 'color' = 'rojo';
+      SELECT id
+      FROM productos_hs
+      WHERE atributos @> 'color=>"rojo"'::hstore;
     """)
     plan = "\n".join(r[0] for r in cur.fetchall())
     assert 'productos_hs_atributos_gin' in plan  # creado en 13_hstore_index_gin.sql
+    cur.execute("SET enable_seqscan = on;")
     cur.close(); conn.close()
 
 def test_a2_aggregations_by_brand():
@@ -109,8 +114,10 @@ def test_a3_json_conversion_roundtrip():
     conn = connect(); cur = conn.cursor()
     cur.execute("SELECT hstore_to_json(atributos)::text FROM productos_hs LIMIT 1;")
     assert cur.fetchone()[0].startswith('{')
-    cur.execute("SELECT hstore('{\"a\"=>\"1\"}')::text;")
-    assert '=>"1"' in cur.fetchone()[0]
+    # PG14: JSON -> HSTORE portable (sin usar hstore(json))
+    cur.execute("SELECT hstore(ARRAY['a'], ARRAY['1'])::text;")
+    s = cur.fetchone()[0]
+    assert '=>"' in s and '"1"' in s
     cur.close(); conn.close()
 
 def test_a4_multi_keys_check():
