@@ -37,3 +37,4 @@ SELECT COUNT(*) FROM productos
 WHERE atributos ? 'color';
 
 --Ejercicios avanzados
+CREATE INDEX idx_hstore_gin ON productos USING GIN (atributos);
