@@ -23,7 +23,6 @@ SET atributos = delete(atributos, 'color')
 WHERE nombre = 'Tomate';
 
 --Ejercicios intermedios 
-CREATE INDEX idx_data_gin ON productos USING GIN (atributos);
 SELECT * FROM productos
 WHERE atributos ? 'marca';
 
