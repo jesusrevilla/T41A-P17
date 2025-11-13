@@ -1,4 +1,3 @@
--- 06_hstore_insert_data.sql
 INSERT INTO productos_hs (nombre, precio, atributos) VALUES
 ('Televisor Sony 55', 1200.00, 'marca => Sony, color => negro, peso => 14kg, categoria => tv'),
 ('Cámara Sony Alpha',  900.00, 'marca => Sony, color => rojo,  peso => 0.65kg, categoria => camara'),

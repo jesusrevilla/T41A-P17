@@ -1,5 +1,3 @@
--- 08_hstore_update_delete.sql
-
 -- Actualizar valor dentro de HSTORE (cambia "peso" de un producto)
 UPDATE productos_hs
 SET atributos = atributos || 'peso => 1.30kg'
