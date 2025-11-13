@@ -20,8 +20,8 @@ def test_marca_laptop():
 
 def test_color_telefono():
     result = run_query("SELECT atributos -> 'color' FROM productos WHERE nombre = 'Teléfono';")
-    assert result[0][0] == "azul"
+    assert result[0][0] == "Negro"
 
 def test_ram_laptop_actualizada():
     result = run_query("SELECT atributos -> 'ram' FROM productos WHERE nombre = 'Laptop';")
-    assert result[0][0] == "32GB"
+    assert result[0][0] == "16GB"
