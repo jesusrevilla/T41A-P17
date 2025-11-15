@@ -37,3 +37,8 @@ WHERE atributos ? 'color';
 
 --Ejercicios avanzados
 CREATE INDEX idx_hstore_gin ON productos USING GIN (atributos);
+
+SELECT atributos->'marca' AS marca,
+       COUNT(*) AS total
+FROM productos
+GROUP BY atributos->'marca';
