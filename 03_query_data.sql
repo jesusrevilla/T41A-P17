@@ -42,3 +42,11 @@ SELECT atributos->'marca' AS marca,
        COUNT(*) AS total
 FROM productos
 GROUP BY atributos->'marca';
+--Falta uno
+SELECT nombre,
+       hstore_to_jsonb(atributos) AS atributos_jsonb
+FROM productos;
+
+SELECT *
+FROM productos
+WHERE atributos ?& ARRAY['color', 'peso'];
