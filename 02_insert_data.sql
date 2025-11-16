@@ -3,7 +3,7 @@ VALUES
   ('{"nombre": "Ana", "activo": true, "edad": 30}'),
   ('{"nombre": "Juan", "activo": false, "edad": 25}');
 
-INSERT INTO productos (data)
+INSERT INTO productos (especificaciones)
 VALUES 
   ('{"color": "Verde", "Tamaño": "Grande", "Categoría": "Electrodoméstico"}'),
   ('{"color": "Rojo", "Tamaño": "Mediano", "Categoría": "Comida"}'),
