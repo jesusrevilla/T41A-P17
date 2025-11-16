@@ -22,3 +22,24 @@ WHERE id = 1;
 UPDATE productos1
 SET atributos = delete(atributos, 'color')
 WHERE id = 2;
+--------------------------------------------------------------------
+--1
+SELECT *
+FROM productos1
+WHERE atributos ? 'marca';
+
+--2
+SELECT *
+FROM productos1
+WHERE atributos->'marca' = 'Sony'
+  AND id = 3;
+
+--3
+SELECT id, skeys(atributos) AS clave, svals(atributos) AS valor
+FROM productos1;
+
+--4
+SELECT COUNT(*)
+FROM productos1
+WHERE atributos ? 'color';
+
