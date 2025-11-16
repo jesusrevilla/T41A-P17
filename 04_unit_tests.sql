@@ -33,7 +33,7 @@ BEGIN
   END IF;
 
   IF EXISTS (
-    SELECT 1 FROM productos WHERE id = 3 AND especificaciones->>'Tamaño' = 'Pequeño'
+    SELECT 1 FROM productos WHERE id = 1 AND especificaciones->>'Tamaño' = 'Pequeño'
   ) THEN
     RAISE NOTICE 'OK: objeto pequeño para id 1';
   ELSE
