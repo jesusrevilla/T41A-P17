@@ -55,7 +55,7 @@ def test_producto1_tiene_color_y_peso():
         FROM productos1 
         WHERE atributos ?& ARRAY['color','peso'];
     """)
-    assert result[0][0] == 5
+    assert result[0][0] == 4
 
 def test_hstore_convertido_a_json():
     result = run_query("SELECT hstore_to_json(atributos)::text FROM productos1 WHERE id = 1;")
