@@ -1,4 +1,22 @@
+DROP EXTENSION IF EXISTS hstore CASCADE;
+
+DROP TABLE IF EXISTS usuarios CASCADE;
+DROP TABLE IF EXISTS productos CASCADE;
+DROP TABLE IF EXISTS productos_u CASCADE;
+
 CREATE TABLE usuarios (
   id SERIAL PRIMARY KEY,
   data JSONB
+);
+
+CREATE TABLE productos_u (
+  id SERIAL PRIMARY KEY,
+  atributos JSONB
+);
+CREATE EXTENSION IF NOT EXISTS hstore;
+
+CREATE TABLE productos (
+  id SERIAL PRIMARY KEY,
+  nombre TEXT,
+  atributos HSTORE
 );
