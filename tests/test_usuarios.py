@@ -15,9 +15,7 @@ def db():
     conn = psycopg2.connect(**DB_CONFIG)
     conn.autocommit = True
     cur = conn.cursor()
-
-    # Ejecutar los 3 archivos SQL en orden
-    sql_dir = Path("sql")
+    sql_dir = Path(".")
 
     for file in [
         "01_create_tables.sql",
