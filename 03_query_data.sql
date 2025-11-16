@@ -32,7 +32,7 @@ WHERE atributos ? 'marca';
 SELECT *
 FROM productos1
 WHERE atributos->'marca' = 'Sony'
-  AND id = 3;
+AND id = 3;
 
 --3
 SELECT id, skeys(atributos) AS clave, svals(atributos) AS valor
@@ -43,3 +43,39 @@ SELECT COUNT(*)
 FROM productos1
 WHERE atributos ? 'color';
 
+--1
+CREATE INDEX idx_productos1_gin
+ON productos1
+USING GIN (atributos);
+
+--2
+SELECT atributos->'marca' AS marca,
+COUNT(*) AS total_productos
+FROM productos1
+GROUP BY atributos->'marca';
+
+--3
+SELECT id, json_to_hstore(especificaciones)
+FROM productos;
+
+SELECT id, hstore_to_json(especificaciones)
+FROM productos;
+
+--4
+SELECT *
+FROM productos1
+WHERE atributos ?& ARRAY['color', 'peso'];
+
+--5
+CREATE OR REPLACE FUNCTION resumen_producto(attrs HSTORE)
+RETURNS TEXT AS $$
+BEGIN
+    RETURN 
+        'Producto: marca=' || COALESCE(attrs->'marca', 'N/A') ||
+        ', color=' || COALESCE(attrs->'color', 'N/A') ||
+        ', peso=' || COALESCE(attrs->'peso', 'N/A');
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT id, resumen_producto(atributos)
+FROM productos1;
