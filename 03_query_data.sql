@@ -50,3 +50,16 @@ FROM productos;
 SELECT *
 FROM productos
 WHERE atributos ?& ARRAY['color', 'peso'];
+
+CREATE OR REPLACE FUNCTION resumen_producto(attrs HSTORE)
+RETURNS TEXT AS $$
+DECLARE
+    marca TEXT := attrs->'marca';
+    color TEXT := attrs->'color';
+    peso  TEXT := attrs->'peso';
+BEGIN
+    RETURN 'Producto: marca=' || COALESCE(marca, 'N/A') ||
+           ', color=' || COALESCE(color, 'N/A') ||
+           ', peso=' || COALESCE(peso, 'N/A');
+END;
+$$ LANGUAGE plpgsql;
